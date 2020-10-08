@@ -84,6 +84,11 @@ class PointsValidator(DuplicatedNameInProjectValidator, validators.ModelValidato
         model = models.Points
 
 
+class SwimlaneValidator(DuplicatedNameInProjectValidator, validators.ModelValidator):
+    class Meta:
+        model = models.Swimlane
+
+
 class UserStoryDueDateValidator(DuplicatedNameInProjectValidator, validators.ModelValidator):
     class Meta:
         model = models.UserStoryDueDate

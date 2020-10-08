@@ -642,6 +642,23 @@ class PointsViewSet(MoveOnDestroyMixin, BlockedByProjectMixin,
             return super().create(request, *args, **kwargs)
 
 
+# yms: ¿hacen falta estos 4 mixins?
+class SwimlaneViewSet(MoveOnDestroyMixin, BlockedByProjectMixin,
+                    ModelCrudViewSet, BulkUpdateOrderMixin):
+
+    model = models.Swimlane
+    serializer_class = serializers.SwimlaneSerializer
+    validator_class = validators.SwimlaneValidator
+    permission_classes = (permissions.SwimlanePermission,)
+    filter_backends = (filters.CanViewProjectFilterBackend,)
+    filter_fields = ('project',)
+
+    def create(self, request, *args, **kwargs):
+        project_id = request.DATA.get("project", 0)
+        with advisory_lock("points-creation-{}".format(project_id)):
+            return super().create(request, *args, **kwargs)
+
+
 class UserStoryDueDateViewSet(BlockedByProjectMixin, ModelCrudViewSet):
 
     model = models.UserStoryDueDate
